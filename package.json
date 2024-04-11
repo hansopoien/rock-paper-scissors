@@ -4,7 +4,8 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "dev": "nodemon app.js",
+        "local": "nodemon app.js",
+        "public": "nodemon app.js --use-localtunnel",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "keywords": [],
