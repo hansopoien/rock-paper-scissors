@@ -14,7 +14,7 @@ app.get("/", function (req, res) {
 app.listen(port, function () {
     console.log(`Server is running on port ${port}`);
     if (useLocaltunnel) {
-        const setupLocaltunnel = require("./functions/setupLocaltunnel");
+        const setupLocaltunnel = require("./helperFunctions/setupLocaltunnel.js");
         setupLocaltunnel(port);
     }
     console.log(useLocaltunnel); // remove this line
