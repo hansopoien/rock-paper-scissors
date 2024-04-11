@@ -19,6 +19,7 @@ let playerTwoMove;
 
 async function handleNewGame(req, res) {
     let { name = "" } = req.body;
+    name = name.trim();
     playerOneName = determinePlayerName(name, "Player 1");
     const tenRandomDigits = crypto.randomBytes(4).readUInt32LE(0);
     gameIDNumber = tenRandomDigits;
@@ -42,6 +43,7 @@ async function handleNewGame(req, res) {
 
 async function handleConnectToGame(req, res) {
     let { name = "" } = req.body;
+    name = name.trim();
     const paramGameIDNumber = Number(req.params.id);
     playerTwoName = determinePlayerName(name, "Player 2");
 
@@ -50,7 +52,7 @@ async function handleConnectToGame(req, res) {
             return res.status(400).send({ error: "Invalid game ID." });
         }
 
-        if (playerOneName === makeCaseInsensitive(playerTwoName)) {
+        if (makeCaseInsensitive(playerTwoName).test(playerOneName)) {
             return res.status(409).send({
                 error: [
                     "Player name:",
@@ -112,7 +114,7 @@ async function handleMove(req, res) {
         if (makeCaseInsensitive(playerOneName).test(name)) {
             const moveResponse = checkPlayerMoveRegistered(
                 playerOneMove,
-                playerOneName,
+                name,
                 res
             );
             if (moveResponse) return;
@@ -121,7 +123,7 @@ async function handleMove(req, res) {
         } else if (makeCaseInsensitive(playerTwoName).test(name)) {
             const moveResponse = checkPlayerMoveRegistered(
                 playerTwoMove,
-                playerTwoName,
+                name,
                 res
             );
             if (moveResponse) return;
