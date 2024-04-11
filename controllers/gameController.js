@@ -6,6 +6,8 @@ const {
     getValidMoves,
 } = require("../helperFunctions/validateMove");
 const makeCaseInsensitive = require("../helperFunctions/makeCaseInsensitive");
+const checkPlayerMoveRegistered = require("../helperFunctions/checkPlayerMoveRegistered");
+const sendSuccsessMoveMessage = require("../helperFunctions/sendSuccessMoveMessage");
 
 let gameIDNumber;
 
@@ -72,7 +74,7 @@ async function handleConnectToGame(req, res) {
     }
 }
 
-async function handleMove() {
+async function handleMove(req, res) {
     let { name = "", move = "" } = req.body;
     const paramGameIDNumber = Number(req.params.id);
     try {
@@ -81,8 +83,8 @@ async function handleMove() {
         }
 
         if (
-            name !== makeCaseInsensitive(playerOneName) ||
-            name !== makeCaseInsensitive(playerTwoName)
+            !makeCaseInsensitive(playerOneName).test(name) &&
+            !makeCaseInsensitive(playerTwoName).test(name)
         ) {
             return res.status(400).send({
                 error: [
@@ -107,12 +109,30 @@ async function handleMove() {
             });
         }
 
-        if (name === playerOneName) {
+        if (makeCaseInsensitive(playerOneName).test(name)) {
+            const moveResponse = checkPlayerMoveRegistered(
+                playerOneMove,
+                playerOneName,
+                res
+            );
+            if (moveResponse) return;
             playerOneMove = move;
-        } else if (name === playerTwoName) {
+            return sendSuccsessMoveMessage(res, name, playerOneMove);
+        } else if (makeCaseInsensitive(playerTwoName).test(name)) {
+            const moveResponse = checkPlayerMoveRegistered(
+                playerTwoMove,
+                playerTwoName,
+                res
+            );
+            if (moveResponse) return;
             playerTwoMove = move;
+            return sendSuccsessMoveMessage(res, name, playerTwoMove);
+        } else {
+            return res.status(500).send({ error: "Something went wrong." });
         }
-    } catch (error) {}
+    } catch (error) {
+        res.status(500).send({ error: error.message });
+    }
 }
 
 module.exports = { handleNewGame, handleConnectToGame, handleMove };
