@@ -10,4 +10,8 @@ function validateMove(move) {
     }
 }
 
-module.exports = validateMove;
+function getValidMoves() {
+    return validMoves;
+}
+
+module.exports = { validateMove, getValidMoves };
