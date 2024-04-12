@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const port = process.env.PORT || 3000;
 const gameRouter = require("./routes/gameRouter.js");
-const useLocaltunnel = process.argv.includes("--use-localtunnel");
+const isLocaltunnelEnabled = require("./helperFunctions/isLocaltunnelEnabled.js");
 
 app.use(express.json());
 app.use("/api/games", gameRouter);
@@ -13,9 +13,9 @@ app.get("/", function (req, res) {
 
 app.listen(port, function () {
     console.log(`Server is running on port ${port}`);
-    if (useLocaltunnel) {
+    if (isLocaltunnelEnabled()) {
         const setupLocaltunnel = require("./helperFunctions/setupLocaltunnel.js");
         setupLocaltunnel(port);
     }
-    console.log(useLocaltunnel); // remove this line
+    console.log(isLocaltunnelEnabled()); // remove this line
 });

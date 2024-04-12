@@ -77,4 +77,16 @@ function handleMove(req, res) {
     }
 }
 
-module.exports = { handleNewGame, handleConnectToGame, handleMove };
+function handleStateOfGame(req, res) {
+    try {
+    } catch (error) {
+        res.status(500).send({ error: error.message });
+    }
+}
+
+module.exports = {
+    handleNewGame,
+    handleConnectToGame,
+    handleMove,
+    handleStateOfGame,
+};
