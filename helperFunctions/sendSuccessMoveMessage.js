@@ -1,7 +1,7 @@
-function sendSuccsessMoveMessage(res, playerName, playerMove) {
+function sendSuccessMoveMessage(res, player) {
     return res.status(200).send({
-        message: `Player: '${playerName}' have successfully registered the move: '${playerMove}'!`,
+        message: `Player: '${player.name}' have successfully registered the move: '${player.move}'!`,
     });
 }
 
-module.exports = sendSuccsessMoveMessage;
+module.exports = sendSuccessMoveMessage;

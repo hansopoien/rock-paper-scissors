@@ -1,16 +1,10 @@
 const crypto = require("crypto");
 const determinePlayerName = require("../helperFunctions/determinePlayerName");
 const getPlayerNameMessagePrefix = require("../helperFunctions/getPlayerNameMessagePrefix");
-const {
-    validateMove,
-    getValidMoves,
-} = require("../helperFunctions/validateMove");
-const makeCaseInsensitive = require("../helperFunctions/makeCaseInsensitive");
-const checkPlayerMoveRegistered = require("../helperFunctions/checkPlayerMoveRegistered");
-const sendSuccsessMoveMessage = require("../helperFunctions/sendSuccessMoveMessage");
 const { players, addPlayer } = require("../models/players");
 const { gameID, setGameIDNumber } = require("../models/gameIDNumber");
 const conditions = require("../helperFunctions/conditions");
+const findPlayerByName = require("../helperFunctions/findPlayerByName");
 
 async function handleNewGame(req, res) {
     try {
@@ -39,30 +33,12 @@ async function handleConnectToGame(req, res) {
     try {
         let { name = "" } = req.body;
         name = name.trim();
-        const handleParamIdRes = conditions.handleParamID(req.params.id, res);
-        if (handleParamIdRes) return;
 
-        if (players.length > 1) {
-            return res.status(409).send({
-                error: [
-                    "You have already joined the game against player:",
-                    `${players[0].name}`,
-                    "you player name is:",
-                    `${players[players.length - 1].name}`,
-                ],
-            });
-        }
+        if (conditions.handleID(req.params.id, res)) return;
 
-        if (makeCaseInsensitive(name).test(players[0].name)) {
-            return res.status(409).send({
-                error: [
-                    "Player name:",
-                    `${players[0].name}`,
-                    "Have already been taken by: 'player 1'!",
-                    "Please choose a different name.",
-                ],
-            });
-        }
+        if (conditions.handleMultipleJoins(res)) return;
+
+        if (conditions.handleSamePlayerNames(name, res)) return;
 
         addPlayer(determinePlayerName(name, "Player 2"));
 
@@ -82,56 +58,20 @@ async function handleConnectToGame(req, res) {
 async function handleMove(req, res) {
     try {
         let { name = "", move = "" } = req.body;
-        const handleParamIdRes = conditions.handleParamID(req.params.id, res);
-        if (handleParamIdRes) return;
+        name = name.trim();
+        move = move.trim();
 
-        if (!validateMove(move)) {
-            return res.status(400).send({
-                error: [
-                    "Invalid move!",
-                    "Valid moves are:",
-                    getValidMoves()[0],
-                    getValidMoves()[1],
-                    getValidMoves()[2],
-                ],
-            });
-        }
+        if (conditions.handleID(req.params.id, res)) return;
 
-        if (makeCaseInsensitive(players[0].name).test(name)) {
-            const moveResponse = checkPlayerMoveRegistered(
-                players[0].move,
-                name,
-                res
-            );
-            if (moveResponse) return;
-            players[0].move = move;
-            return sendSuccsessMoveMessage(res, name, players[0].move);
-        } else if (
-            makeCaseInsensitive(players[players.length - 1].name).test(name)
-        ) {
-            const moveResponse = checkPlayerMoveRegistered(
-                players[players.length - 1].move,
-                name,
-                res
-            );
-            if (moveResponse) return;
-            players[players.length - 1].move = move;
-            return sendSuccsessMoveMessage(
-                res,
-                name,
-                players[players.length - 1].move
-            );
-        } else {
-            return res.status(400).send({
-                error: [
-                    "Invalid player name!",
-                    "Valid names are:",
-                    `${players[0].name}`,
-                    "And",
-                    `${players[players.length - 1].name}`,
-                ],
-            });
-        }
+        if (conditions.handleInvalidMove(move, res)) return;
+
+        const player = findPlayerByName(name);
+        if (conditions.handlePlayerMove(player, res)) return;
+
+        player.move = move;
+        return res.status(200).send({
+            message: `Player: '${player.name}' have successfully registered the move: '${player.move}'!`,
+        });
     } catch (error) {
         res.status(500).send({ error: error.message });
     }
