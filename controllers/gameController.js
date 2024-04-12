@@ -6,7 +6,7 @@ const { gameID, setGameIDNumber } = require("../models/gameIDNumber");
 const conditions = require("../helperFunctions/conditions");
 const findPlayerByName = require("../helperFunctions/findPlayerByName");
 
-async function handleNewGame(req, res) {
+function handleNewGame(req, res) {
     try {
         let { name = "" } = req.body;
         name = name.trim();
@@ -29,7 +29,7 @@ async function handleNewGame(req, res) {
     }
 }
 
-async function handleConnectToGame(req, res) {
+function handleConnectToGame(req, res) {
     try {
         let { name = "" } = req.body;
         name = name.trim();
@@ -55,7 +55,7 @@ async function handleConnectToGame(req, res) {
     }
 }
 
-async function handleMove(req, res) {
+function handleMove(req, res) {
     try {
         let { name = "", move = "" } = req.body;
         name = name.trim();
