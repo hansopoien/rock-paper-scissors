@@ -79,6 +79,9 @@ function handleMove(req, res) {
 
 function handleStateOfGame(req, res) {
     try {
+        if (players[0].move && players[players.length - 1].move) {
+            return res.status(200).send({ message: "Todo!" });
+        }
     } catch (error) {
         res.status(500).send({ error: error.message });
     }
