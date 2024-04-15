@@ -4,6 +4,8 @@ const { gameID, setGameIDNumber } = require("../models/gameIDNumber");
 const findPlayerByName = require("../helperFunctions/findPlayerByName");
 const handleNoProvidedName = require("../helperFunctions/handleNoProvidedName");
 const handleProvidedNameMessage = require("../helperFunctions/handleProvidedNameMessage");
+const handlePlayerStateMessage = require("../helperFunctions/handlePlayerStateMessage");
+const determineWinner = require("../helperFunctions/determineWinner");
 
 function handleNewGame(req, res) {
     try {
@@ -62,9 +64,29 @@ function handleMove(req, res) {
 
 function handleStateOfGame(req, res) {
     try {
-        if (players[0].move && players[1].move) {
-            return res.status(200).send({ message: "Todo!" });
+        const isMovesRegistered = players[0]?.move && players[1]?.move;
+        let messageAndWinner;
+
+        if (isMovesRegistered) {
+            messageAndWinner = determineWinner(players[0], players[1]);
         }
+
+        res.status(200).send({
+            message: [
+                `---STATE OF GAME---`,
+                `Game-ID: ${gameID.number || "Not registered"}`,
+                "---",
+                ...handlePlayerStateMessage(players[0], 1, isMovesRegistered),
+                "---",
+                ...handlePlayerStateMessage(players[1], 2, isMovesRegistered),
+                "---",
+                `${
+                    isMovesRegistered
+                        ? `${messageAndWinner.message}${messageAndWinner.winner}`
+                        : "Game result will be here"
+                }`,
+            ],
+        });
     } catch (error) {
         res.status(500).send({ error: error.message });
     }

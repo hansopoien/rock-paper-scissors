@@ -8,9 +8,10 @@ const handleInvalidMove = require("../middlewares/handleInvalidMove");
 const handlePlayerNotFound = require("../middlewares/handlePlayerNotFound");
 const handlePlayerMultipleMove = require("../middlewares/handlePlayerMultipleMove");
 const trimName = require("../middlewares/trimName");
-const trimMove = require("../middlewares/trimMove");
+const formatMove = require("../middlewares/formatMove");
 
 router.post("/", trimName, gameController.handleNewGame);
+
 router.post(
     "/:id/join",
     handleID,
@@ -25,9 +26,11 @@ router.put(
     trimName,
     handlePlayerNotFound,
     handlePlayerMultipleMove,
-    trimMove,
+    formatMove,
     handleInvalidMove,
     gameController.handleMove
 );
+
+router.get("/:id", handleID, gameController.handleStateOfGame);
 
 module.exports = router;

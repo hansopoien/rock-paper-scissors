@@ -1,6 +1,7 @@
 function trimName(req, res, next) {
-    if (req.body.name && typeof req.body.name === "string") {
-        req.body.name = req.body.name.trim();
+    const { name } = req.body;
+    if (name && typeof name === "string") {
+        req.body.name = name.trim();
     }
     next();
 }
