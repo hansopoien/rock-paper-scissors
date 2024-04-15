@@ -1,25 +1,24 @@
 const crypto = require("crypto");
-const determinePlayerName = require("../helperFunctions/determinePlayerName");
-const getPlayerNameMessagePrefix = require("../helperFunctions/getPlayerNameMessagePrefix");
 const { players, addPlayer } = require("../models/players");
 const { gameID, setGameIDNumber } = require("../models/gameIDNumber");
 const conditions = require("../helperFunctions/conditions");
 const findPlayerByName = require("../helperFunctions/findPlayerByName");
+const { isValidMove } = require("../helperFunctions/isValidMove");
 
 function handleNewGame(req, res) {
     try {
         let { name = "" } = req.body;
         name = name.trim();
         players.length = 0;
-        addPlayer(determinePlayerName(name, "Player 1"));
+        addPlayer(conditions.handleNoProvidedName(name, "Player 1"));
         const tenRandomDigits = crypto.randomBytes(4).readUInt32LE(0);
         setGameIDNumber(tenRandomDigits);
 
         return res.status(201).send({
             message: [
                 "A new game have successfully been created!",
-                getPlayerNameMessagePrefix(name),
-                `${players[0].name}`,
+                conditions.handleProvidedNameMessage(name),
+                players[0].name,
                 "here is the game-ID:",
                 gameID.number,
             ],
@@ -36,18 +35,19 @@ function handleConnectToGame(req, res) {
 
         if (conditions.handleID(req.params.id, res)) return;
 
-        if (conditions.handleMultipleJoins(res)) return;
+        if (conditions.handlePlayerMultipleJoins(res)) return;
 
-        if (conditions.handleSamePlayerNames(name, res)) return;
+        if (conditions.handleSamePlayerNames(findPlayerByName(name), res))
+            return;
 
-        addPlayer(determinePlayerName(name, "Player 2"));
+        addPlayer(conditions.handleNoProvidedName(name, "Player 2"));
 
         return res.status(200).send({
             message: [
                 "You have successfully join the game against player:",
-                `${players[0].name}`,
-                getPlayerNameMessagePrefix(name),
-                `${players[players.length - 1].name}`,
+                players[0].name,
+                conditions.handleProvidedNameMessage(name),
+                players[1].name,
             ],
         });
     } catch (error) {
@@ -60,13 +60,15 @@ function handleMove(req, res) {
         let { name = "", move = "" } = req.body;
         name = name.trim();
         move = move.trim();
+        const player = findPlayerByName(name);
 
         if (conditions.handleID(req.params.id, res)) return;
 
-        if (conditions.handleInvalidMove(move, res)) return;
+        if (conditions.handlePlayerNotFound(player, res)) return;
 
-        const player = findPlayerByName(name);
-        if (conditions.handlePlayerMove(player, res)) return;
+        if (conditions.handlePlayerMultipleMove(player, res)) return;
+
+        if (conditions.handleInvalidMove(isValidMove(move), res)) return;
 
         player.move = move;
         return res.status(200).send({
@@ -79,7 +81,7 @@ function handleMove(req, res) {
 
 function handleStateOfGame(req, res) {
     try {
-        if (players[0].move && players[players.length - 1].move) {
+        if (players[0].move && players[1].move) {
             return res.status(200).send({ message: "Todo!" });
         }
     } catch (error) {

@@ -1,8 +1,19 @@
 const { gameID } = require("../models/gameIDNumber");
 const { players } = require("../models/players");
-const checkPlayerMoveStatus = require("./checkPlayerMoveStatus");
-const findPlayerByName = require("./findPlayerByName");
-const { validateMove, getValidMoves } = require("./validateMove");
+const { validMoves } = require("./isValidMove");
+
+function handleNoProvidedName(validateName, defaultName) {
+    if (!validateName) {
+        return defaultName;
+    }
+    return validateName;
+}
+
+function handleProvidedNameMessage(name) {
+    return !name
+        ? "Since you have not provided a name, your player name is defaulted to:"
+        : "Your player name is:";
+}
 
 function handleID(id, res) {
     const paramGameIDNumber = Number(id);
@@ -13,27 +24,26 @@ function handleID(id, res) {
     return null;
 }
 
-function handleMultipleJoins(res) {
+function handlePlayerMultipleJoins(res) {
     if (players.length > 1) {
         return res.status(409).send({
             error: [
                 "You have already joined the game against player:",
-                `${players[0].name}`,
+                players[0].name,
                 "you player name is:",
-                `${players[players.length - 1].name}`,
+                players[players.length - 1].name,
             ],
         });
     }
     return null;
 }
 
-function handleSamePlayerNames(name, res) {
-    const player = findPlayerByName(name);
+function handleSamePlayerNames(player, res) {
     if (player) {
         return res.status(409).send({
             error: [
                 "Player name:",
-                `${player.name}`,
+                player.name,
                 `has already been taken by: 'player 1'!`,
                 "Please choose a different name.",
             ],
@@ -43,42 +53,50 @@ function handleSamePlayerNames(name, res) {
 }
 
 function handleInvalidMove(move, res) {
-    if (!validateMove(move)) {
+    if (!move) {
         return res.status(400).send({
             error: [
                 "Invalid move!",
                 "Valid moves are:",
-                getValidMoves()[0],
-                getValidMoves()[1],
-                getValidMoves()[2],
+                validMoves[0],
+                validMoves[1],
+                validMoves[2],
             ],
         });
     }
     return null;
 }
 
-function handlePlayerMove(player, res) {
+function handlePlayerNotFound(player, res) {
     if (!player) {
         return res.status(400).send({
             error: [
                 "Invalid player name!",
                 "Valid names are:",
-                `${players[0].name}`,
+                players[0].name,
                 "And",
-                `${players[players.length - 1].name}`,
+                players[players.length - 1].name,
             ],
         });
     }
-    if (checkPlayerMoveStatus(player, res)) {
-        return true;
+}
+
+function handlePlayerMultipleMove(player, res) {
+    if (player.move) {
+        return res.status(409).send({
+            error: `A move by: '${player.name}' has already been registered!`,
+        });
     }
     return null;
 }
 
 module.exports = {
+    handleNoProvidedName,
+    handleProvidedNameMessage,
     handleID,
-    handleMultipleJoins,
+    handlePlayerMultipleJoins,
     handleSamePlayerNames,
     handleInvalidMove,
-    handlePlayerMove,
+    handlePlayerNotFound,
+    handlePlayerMultipleMove,
 };

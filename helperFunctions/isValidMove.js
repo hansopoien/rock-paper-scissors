@@ -2,14 +2,10 @@ const makeCaseInsensitive = require("./makeCaseInsensitive");
 
 const validMoves = ["Rock", "Paper", "Scissors"];
 
-function validateMove(move) {
+function isValidMove(move) {
     return validMoves.some(validMove =>
         makeCaseInsensitive(validMove).test(move)
     );
 }
 
-function getValidMoves() {
-    return validMoves;
-}
-
-module.exports = { validateMove, getValidMoves };
+module.exports = { isValidMove, validMoves };
