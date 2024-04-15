@@ -1,7 +1,3 @@
-const conditionValue = process.argv.includes("--use-localtunnel");
-
-function isLocaltunnelEnabled() {
-    return conditionValue;
-}
+const isLocaltunnelEnabled = process.argv.includes("--use-localtunnel");
 
 module.exports = isLocaltunnelEnabled;

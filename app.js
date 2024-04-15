@@ -1,21 +1,25 @@
 const express = require("express");
 const app = express();
-const port = process.env.PORT || 3000;
 const gameRouter = require("./routes/gameRouter.js");
 const isLocaltunnelEnabled = require("./helperFunctions/isLocaltunnelEnabled.js");
+const { url, fullAddress } = require("./helperFunctions/url.js");
 
 app.use(express.json());
-app.use("/api/games", gameRouter);
+app.use(url.path, gameRouter);
 
 app.get("/", function (req, res) {
     res.send("Backend is running");
 });
 
-app.listen(port, function () {
-    console.log(`Server is running on port ${port}`);
-    if (isLocaltunnelEnabled()) {
-        const setupLocaltunnel = require("./helperFunctions/setupLocaltunnel.js");
-        setupLocaltunnel(port);
+app.listen(url.port, function () {
+    console.log(`Server is running on port ${url.port}`);
+    if (isLocaltunnelEnabled) {
+        const {
+            setupLocaltunnel,
+            tunnelUrl,
+        } = require("./helperFunctions/setupLocaltunnel.js");
+        fullAddress.address = setupLocaltunnel(url.port);
+        // fullAddress.address = tunnelUrl;
     }
-    console.log(isLocaltunnelEnabled()); // remove this line
+    console.log(fullAddress.address);
 });

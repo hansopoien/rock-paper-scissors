@@ -1,11 +1,12 @@
 const crypto = require("crypto");
 const { players, addPlayer } = require("../models/players");
-const { gameID, setGameIDNumber } = require("../models/gameIDNumber");
+const gameID = require("../models/gameIDNumber");
 const findPlayerByName = require("../helperFunctions/findPlayerByName");
 const handleNoProvidedName = require("../helperFunctions/handleNoProvidedName");
 const handleProvidedNameMessage = require("../helperFunctions/handleProvidedNameMessage");
 const handlePlayerStateMessage = require("../helperFunctions/handlePlayerStateMessage");
 const determineWinner = require("../helperFunctions/determineWinner");
+const { fullAddress } = require("../helperFunctions/url");
 
 function handleNewGame(req, res) {
     try {
@@ -13,8 +14,8 @@ function handleNewGame(req, res) {
         players.length = 0;
         addPlayer(handleNoProvidedName(name, "Player 1"));
         const tenRandomDigits = crypto.randomBytes(4).readUInt32LE(0);
-        setGameIDNumber(tenRandomDigits);
-
+        gameID.number = tenRandomDigits;
+        console.log(fullAddress.address);
         return res.status(201).send({
             message: [
                 "A new game have successfully been created!",

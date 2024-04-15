@@ -1,4 +1,4 @@
-const { gameID } = require("../models/gameIDNumber");
+const gameID = require("../models/gameIDNumber");
 
 function handleID(req, res, next) {
     const paramGameIDNumber = Number(req.params.id);
