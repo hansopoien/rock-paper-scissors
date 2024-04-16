@@ -6,7 +6,8 @@ const handleNoProvidedName = require("../helperFunctions/handleNoProvidedName");
 const handleProvidedNameMessage = require("../helperFunctions/handleProvidedNameMessage");
 const handlePlayerStateMessage = require("../helperFunctions/handlePlayerStateMessage");
 const determineWinner = require("../helperFunctions/determineWinner");
-const { fullAddress } = require("../helperFunctions/url");
+const { fullBaseAddress, url } = require("../helperFunctions/url");
+const instructionMessages = require("../helperFunctions/instructionMessages");
 
 function handleNewGame(req, res) {
     try {
@@ -15,14 +16,13 @@ function handleNewGame(req, res) {
         addPlayer(handleNoProvidedName(name, "Player 1"));
         const tenRandomDigits = crypto.randomBytes(4).readUInt32LE(0);
         gameID.number = tenRandomDigits;
-        console.log(fullAddress.address);
         return res.status(201).send({
             message: [
                 "A new game have successfully been created!",
                 handleProvidedNameMessage(name),
                 players[0].name,
-                "here is the game-ID:",
-                gameID.number,
+                ...instructionMessages.newGameCreatedInstructions(),
+                ...instructionMessages.connectedToGameInstructions(),
             ],
         });
     } catch (error) {
@@ -42,6 +42,7 @@ function handleConnectToGame(req, res) {
                 players[0].name,
                 handleProvidedNameMessage(name),
                 players[1].name,
+                ...instructionMessages.connectedToGameInstructions(),
             ],
         });
     } catch (error) {

@@ -1,7 +1,4 @@
 const localtunnel = require("localtunnel");
-const { fullAddress } = require("./url");
-
-let tunnelUrl;
 
 async function setupLocaltunnel(port) {
     try {
@@ -9,11 +6,10 @@ async function setupLocaltunnel(port) {
             port,
         });
         console.log(`Tunnel established at: ${tunnel.url}`);
-        tunnelUrl = tunnel.url;
         return tunnel.url;
     } catch (error) {
         console.error(`Error establishing tunnel: ${error.message}`);
     }
 }
 
-module.exports = { setupLocaltunnel, tunnelUrl };
+module.exports = setupLocaltunnel;

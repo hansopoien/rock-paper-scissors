@@ -6,8 +6,8 @@ const url = {
     move: "move",
 };
 
-const fullAddress = {
-    address: `${url.server}:${url.port}${url.path}`,
+const fullBaseAddress = {
+    address: `${url.server}:${url.port}`,
 };
 
-module.exports = { url, fullAddress };
+module.exports = { url, fullBaseAddress };
