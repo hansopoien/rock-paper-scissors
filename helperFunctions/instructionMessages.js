@@ -21,7 +21,7 @@ function getInstructionsForNewGameCreated(address) {
 
 function getInstructionsForConnectedToGame(address) {
     return [
-        "You can make your 'Rock, paper, scissors' move",
+        "You can make your 'Rock, Paper, Scissors' move",
         "by making a PUT request,",
         "that contains a json-body with the following two key-value pairs:",
         "name: <your player name>",

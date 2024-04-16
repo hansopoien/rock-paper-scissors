@@ -47,9 +47,9 @@ function handleConnectToGame(req, res) {
         return res.status(200).send({
             message: [
                 "You have successfully join the game against player:",
-                players[0].name,
+                players.length > 1 ? players[0].name : "Not registered",
                 handleProvidedNameMessage(name),
-                players[1].name,
+                players[players.length - 1].name,
                 ...instructionMessages.getInstructionsForConnectedToGame(
                     getMakeMoveUrl(gameID.number)
                 ),
