@@ -10,4 +10,27 @@ const fullBaseAddress = {
     address: `${url.server}:${url.port}`,
 };
 
-module.exports = { url, fullBaseAddress };
+function getNewGameUrl() {
+    return `${fullBaseAddress.address}${url.path}`;
+}
+
+function getJoinGameUrl(id) {
+    return `${fullBaseAddress.address}${url.path}/${id}/${url.join}`;
+}
+
+function getMakeMoveUrl(id) {
+    return `${fullBaseAddress.address}${url.path}/${id}/${url.move}`;
+}
+
+function getStateOfGameUrl(id) {
+    return `${fullBaseAddress.address}${url.path}/${id}`;
+}
+
+module.exports = {
+    url,
+    fullBaseAddress,
+    getNewGameUrl,
+    getJoinGameUrl,
+    getMakeMoveUrl,
+    getStateOfGameUrl,
+};

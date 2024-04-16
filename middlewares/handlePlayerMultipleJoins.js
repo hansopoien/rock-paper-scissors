@@ -1,4 +1,7 @@
 const { players } = require("../models/players");
+const instructionMessages = require("../helperFunctions/instructionMessages");
+const { getMakeMoveUrl } = require("../helperFunctions/url");
+const gameID = require("../models/gameIDNumber");
 
 function handlePlayerMultipleJoins(req, res, next) {
     if (players.length > 1) {
@@ -8,6 +11,9 @@ function handlePlayerMultipleJoins(req, res, next) {
                 players[0].name,
                 "you player name is:",
                 players[1].name,
+                ...instructionMessages.getInstructionsForConnectedToGame(
+                    getMakeMoveUrl(gameID.number)
+                ),
             ],
         });
     }

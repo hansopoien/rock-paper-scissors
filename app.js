@@ -2,7 +2,11 @@ const express = require("express");
 const app = express();
 const gameRouter = require("./routes/gameRouter.js");
 const isLocaltunnelEnabled = require("./helperFunctions/isLocaltunnelEnabled.js");
-const { url, fullBaseAddress } = require("./helperFunctions/url.js");
+const {
+    url,
+    fullBaseAddress,
+    getNewGameUrl,
+} = require("./helperFunctions/url.js");
 const instructionMessages = require("./helperFunctions/instructionMessages.js");
 
 app.use(express.json());
@@ -19,6 +23,8 @@ app.listen(url.port, async function () {
         fullBaseAddress.address = await setupLocaltunnel(url.port);
     }
     console.log(
-        instructionMessages.applicationIsRunningInstructions().join("\n")
+        instructionMessages
+            .getInstructionsForApplicationIsRunning(getNewGameUrl())
+            .join("\n")
     );
 });

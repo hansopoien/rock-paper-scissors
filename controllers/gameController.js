@@ -6,7 +6,13 @@ const handleNoProvidedName = require("../helperFunctions/handleNoProvidedName");
 const handleProvidedNameMessage = require("../helperFunctions/handleProvidedNameMessage");
 const handlePlayerStateMessage = require("../helperFunctions/handlePlayerStateMessage");
 const determineWinner = require("../helperFunctions/determineWinner");
-const { fullBaseAddress, url } = require("../helperFunctions/url");
+const {
+    fullBaseAddress,
+    url,
+    getJoinGameUrl,
+    getMakeMoveUrl,
+    getStateOfGameUrl,
+} = require("../helperFunctions/url");
 const instructionMessages = require("../helperFunctions/instructionMessages");
 
 function handleNewGame(req, res) {
@@ -21,8 +27,12 @@ function handleNewGame(req, res) {
                 "A new game have successfully been created!",
                 handleProvidedNameMessage(name),
                 players[0].name,
-                ...instructionMessages.newGameCreatedInstructions(),
-                ...instructionMessages.connectedToGameInstructions(),
+                ...instructionMessages.getInstructionsForNewGameCreated(
+                    getJoinGameUrl(gameID.number)
+                ),
+                ...instructionMessages.getInstructionsForConnectedToGame(
+                    getMakeMoveUrl(gameID.number)
+                ),
             ],
         });
     } catch (error) {
@@ -42,7 +52,9 @@ function handleConnectToGame(req, res) {
                 players[0].name,
                 handleProvidedNameMessage(name),
                 players[1].name,
-                ...instructionMessages.connectedToGameInstructions(),
+                ...instructionMessages.getInstructionsForConnectedToGame(
+                    getMakeMoveUrl(gameID.number)
+                ),
             ],
         });
     } catch (error) {
@@ -57,7 +69,12 @@ function handleMove(req, res) {
 
         player.move = move;
         return res.status(200).send({
-            message: `Player: '${player.name}' have successfully registered the move: '${player.move}'!`,
+            message: [
+                `Player: '${player.name}' have successfully registered the move: '${player.move}'!`,
+                ...instructionMessages.getInstructionsForMoveIsMade(
+                    getStateOfGameUrl(gameID.number)
+                ),
+            ],
         });
     } catch (error) {
         res.status(500).send({ error: error.message });
