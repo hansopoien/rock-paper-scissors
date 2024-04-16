@@ -16,10 +16,13 @@ const instructionMessages = require("../helperFunctions/instructionMessages");
 function handleNewGame(req, res) {
     try {
         let { name = "" } = req.body;
+
         players.length = 0;
         addPlayer(handleNoProvidedName(name, "Player 1"));
+
         const tenRandomDigits = crypto.randomBytes(4).readUInt32LE(0);
         gameID.number = tenRandomDigits;
+
         return res.status(201).send({
             message: [
                 "A new game have successfully been created!",
@@ -63,9 +66,11 @@ function handleConnectToGame(req, res) {
 function handleMove(req, res) {
     try {
         let { name = "", move = "" } = req.body;
+
         const player = findPlayerByName(name);
 
         player.move = move;
+
         return res.status(200).send({
             message: [
                 `Player: '${player.name}' have successfully registered the move: '${player.move}'!`,
