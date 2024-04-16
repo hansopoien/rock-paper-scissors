@@ -8,7 +8,7 @@ function handlePlayerNotFound(req, res, next) {
         players.forEach(player => {
             playerList.push(player.name);
         });
-        return res.status(400).send({
+        return res.status(404).send({
             error: ["Invalid player name!", "Valid names are:", ...playerList],
         });
     }

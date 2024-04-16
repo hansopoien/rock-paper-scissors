@@ -5,7 +5,6 @@ async function setupLocaltunnel(port) {
         const tunnel = await localtunnel({
             port,
         });
-        console.log(`Tunnel established at: ${tunnel.url}`);
         return tunnel.url;
     } catch (error) {
         console.error(`Error establishing tunnel: ${error.message}`);

@@ -1,4 +1,4 @@
-let players = [];
+const players = [];
 
 function addPlayer(name) {
     players.push({ name: name, move: "" });

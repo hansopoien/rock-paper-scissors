@@ -7,8 +7,6 @@ const handleProvidedNameMessage = require("../helperFunctions/handleProvidedName
 const handlePlayerStateMessage = require("../helperFunctions/handlePlayerStateMessage");
 const determineWinner = require("../helperFunctions/determineWinner");
 const {
-    fullBaseAddress,
-    url,
     getJoinGameUrl,
     getMakeMoveUrl,
     getStateOfGameUrl,

@@ -3,7 +3,7 @@ const { isValidMove, validMoves } = require("../helperFunctions/isValidMove");
 function handleInvalidMove(req, res, next) {
     const move = isValidMove(req.body.move);
     if (!move) {
-        return res.status(400).send({
+        return res.status(404).send({
             error: [
                 "Invalid move!",
                 "Valid moves are:",
