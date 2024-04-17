@@ -203,9 +203,9 @@ https://itchy-apples-say.loca.lt/api/games
 }
 ```
 
--   The request must be send to the included address, for the above example the following:  
+-   The request must be send to the included address, for the above example the following address:  
     https://itchy-apples-say.loca.lt/api/games/3613614387/move
--   By sending the above request, the following should be returned for this example to player 1:
+-   By sending the above request, the following should be returned, for this example to player 1:
 
 ```json
 {
