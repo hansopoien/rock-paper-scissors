@@ -384,9 +384,11 @@ app.listen(url.port, async function () {
 I realize that this application may be more than what is expected, due to the imagination that the application was going to work between two computers. When I got feedback from my contact at Cygni that this application only need to work locally, i already have implemented the structure for the use of **[Localtunnel](https://theboroer.github.io/localtunnel-www/)**. I felt proud when i accomplished the implementation of it and fount that it could be in good use for testing applications on other digital devices.  
 So i decided to build the code structure to give the user an option to choose either to use the application local or public.
 
-I am also unsure if the application is generally too complicated, or if it is in line with what is being requested.
+I am also unsure if the application is generally too complicated, involving user-feedback-messages when making requests, and the use of middlewares for handling format of text and validations etc, or if it is in line with the task.
 
 Anyway it has been great pleasure to code this "Sample of work" task, I have learned a lot when I have refactored the code multiple times (I hope :P).  
-I discovered the power of middlewares during the refactor process for example, and i hope my naming of functions are relativity easy to understand.
+I discovered the power of middlewares during the refactor process for example, and i hope my namegiving to functions are relatively easy to understand.
 
-I am excited to hear from you and i hope
+I am excited to hear from you and I hope I pass the review step so i can see you in a technical interview and learn more about my code!
+
+Thanks a lot!
