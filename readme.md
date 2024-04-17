@@ -16,9 +16,9 @@ There is no web host service involved, so the public option is possible using a 
 
 ### Requirements:
 
--   **Node.js** (Author is using version 20.9.0)
--   **NPM** (node package manager) (Author is using version 10.1.0)
--   **CLI** (Command Line Interface) (Author is using Windows Command Prompt on Windows 10 x64)
+-   **[Node.js](https://nodejs.org/en)** (Author is using version 20.9.0)
+-   **[NPM](https://www.npmjs.com/)** (node package manager) (Author is using version 10.1.0)
+-   **[CLI](https://en.wikipedia.org/wiki/Command-line_interface)** (Command Line Interface) (Author is using Windows Command Prompt on Windows 10 x64)
 
 ### Installation process:
 
@@ -52,7 +52,7 @@ npm install
 ### The following packages will be installed:
 
 -   **[Nodemon](https://nodemon.io/)** (Automatically restarts the server if developer save any changes in source code)
--   **[Express](https://expressjs.com/)** (Simplifies the process of building server-side applications)
+-   **[Express.js](https://expressjs.com/)** (Simplifies the process of building server-side applications)
 -   **[Localtunnel](https://theboroer.github.io/localtunnel-www/)** (Allows to share a web service from local machine)
 
 **---Ignore the following warning message---**
@@ -269,4 +269,116 @@ The game is finished!
 The same game process is for running the command: "npm run local"  
 But the server address will then be: "http://localhost:3000"
 
-## Hello world
+## Language and Platforms
+
+The application is written in the code language: "Javascript", using **[Node.js](https://nodejs.org/en)** and **[Express.js](https://expressjs.com/)**.  
+This choice is made because of the author's own preferences and coding skills.
+
+## Code structure
+
+The folder structure is following the MVC (Model-View-Controller) pattern, it's a popular pattern that is recognized by developers when navigating through the folder structure.
+
+### gameRouter.js
+
+The following is the **gameRouter.js** file that is located in the **routes** folder.  
+Here are the four routes defined for creating a new game, joining an existing game, making a move, and retrieving the current state of the game.
+
+Each route specifies a corresponding middleware or middlewares to handle tasks such as input validation, player authentication, and formatting data before passing control to the appropriate controller function.  
+This structure organize and separate the code, making it easier to understand and modify.
+
+```js
+router.post("/", trimName, gameController.handleNewGame);
+
+router.post(
+    "/:id/join",
+    handleID,
+    handlePlayerMultipleJoins,
+    trimName,
+    handleSamePlayerNames,
+    gameController.handleConnectToGame
+);
+router.put(
+    "/:id/move",
+    handleID,
+    trimName,
+    handlePlayerNotFound,
+    handlePlayerMultipleMove,
+    formatMove,
+    handleInvalidMove,
+    gameController.handleMove
+);
+
+router.get("/:id", handleID, gameController.handleStateOfGame);
+```
+
+### gameController.js
+
+The following is the **gameController.js** file that is located in the **controllers** folder.  
+Here is an example of the first controller function named: **handleNewGame**.  
+It resets an array of **players** which acts as a model, stored in **models** folder. The reset of the **players** array enables a new game to take place, without restarting the server.
+
+A player gets added, a helperFunction named: **handleNoProvidedName** from the **helperFunctions** folder is used for setting a default name to: "Player 1" if no name is provided by user. (The helper functions are also used in the middlewares and in app.js)
+
+Ten randomized digits are created and gets stored in the **gameID** object which act as a second model, stored in **models** folder.
+
+The **return** contains helper functions, and functions from the **instructionMessages** file which is located in the **helperFunctions** folder.
+
+```js
+function handleNewGame(req, res) {
+    try {
+        let { name = "" } = req.body;
+
+        players.length = 0;
+        addPlayer(handleNoProvidedName(name, "Player 1"));
+
+        const tenRandomDigits = crypto.randomBytes(4).readUInt32LE(0);
+        gameID.number = tenRandomDigits;
+
+        return res.status(201).send({
+            message: [
+                "A new game have successfully been created!",
+                handleProvidedNameMessage(name),
+                players[0].name,
+                ...instructionMessages.getInstructionsForNewGameCreated(
+                    getJoinGameUrl(gameID.number)
+                ),
+                ...instructionMessages.getInstructionsForConnectedToGame(
+                    getMakeMoveUrl(gameID.number)
+                ),
+            ],
+        });
+    } catch (error) {
+        res.status(500).send({ error: error.message });
+    }
+}
+```
+
+### app.js
+
+The following is the starting file: **app.js** that triggers first when the application starts, it has a **if-statement** **isLocaltunnelEnabled** that depends on if the user run the application with "npm run local" or "npm run public".
+
+```js
+app.use(express.json());
+app.use(url.path, gameRouter);
+
+app.get("/", function (req, res) {
+    res.send("Backend is running");
+});
+
+app.listen(url.port, async function () {
+    console.log(`Server is running on port ${url.port}`);
+    if (isLocaltunnelEnabled) {
+        const setupLocaltunnel = require("./helperFunctions/setupLocaltunnel.js");
+        fullBaseAddress.address = await setupLocaltunnel(url.port);
+    }
+    console.log(
+        instructionMessages
+            .getInstructionsForApplicationIsRunning(getNewGameUrl())
+            .join("\n")
+    );
+});
+```
+
+## Author's thoughts
+
+I realize that this application may be more than what is expected, due to the imagination that the application was going to work between two computers. When I got feedback from my contact at Cygni that this application only need to work locally, i already have implemented the structure
