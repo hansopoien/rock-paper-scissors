@@ -381,14 +381,12 @@ app.listen(url.port, async function () {
 
 ## Author's thoughts
 
-I realize that this application may be more than what is expected, due to the imagination that the application was going to work between two computers. When I got feedback from my contact at Cygni that this application only need to work locally, i already have implemented the structure for the use of **[Localtunnel](https://theboroer.github.io/localtunnel-www/)**. I felt proud when i accomplished the implementation of it and fount that it could be in good use for testing applications on other digital devices.  
-So i decided to build the code structure to give the user an option to choose either to use the application local or public.
+I realize that this application may be more complex than expected, as initially, I assumed it should be possible to operate between two computers. Upon receiving feedback from my contact at Cygni that the application only needs to function locally, I had already implemented the structure to utilize **[Localtunnel.](https://theboroer.github.io/localtunnel-www/)** I felt proud of accomplishing this implementation and therefore I decided to build the code structure to provide the user with an option to choose between using the application locally or public. But i am unsure if **[Localtunnel](https://theboroer.github.io/localtunnel-www/)** is good practice to use for this type of workflow when it comes to "real" security, etc.
 
-I am also unsure if the application is generally too complicated, involving user-feedback-messages when making requests, and the use of middlewares for handling format of text and validations etc, or if it is in line with the task.
+I am also uncertain whether the application has become to complicated, especially with the inclusion of user feedback messages during requests and the use of middlewares for handling text formats and validations. But i hope it aligns well with the task requirements!
 
-Anyway it has been great pleasure to code this "Sample of work" task, I have learned a lot when I have refactored the code multiple times (I hope :P).  
-I discovered the power of middlewares during the refactor process for example, and i hope my namegiving to functions are relatively easy to understand.
+Anyway, it has been a great pleasure to work on this "Sample of Work" task. I have learned a lot through multiple code refactoring iterations (or so I hope!). For instance, I discovered the power of middlewares during the refactoring process. I also hope that my function names are relatively easy to understand.
 
-I am excited to hear from you and I hope I pass the review step so i can see you in a technical interview and learn more about my code!
+I am excited to hear your feedback, and I hope to pass the review step so I can proceed to a technical interview and gain further insights into my code!
 
 Thanks a lot!
