@@ -117,7 +117,7 @@ https://itchy-apples-say.loca.lt/api/games
 -   Now you choose your prefered API testing software.
 -   You need to set the request to:  
     **POST**
--   The format must be in in:  
+-   The format must be in:  
     **JSON**
 -   The body should contain a key-value pair like the following example for player 1 name:
 
@@ -127,7 +127,9 @@ https://itchy-apples-say.loca.lt/api/games
 }
 ```
 
--   By sending the above request, the following should be returned:
+-   By sending the above request, with the address for this example:  
+    https://itchy-apples-say.loca.lt/api/games  
+    The following should be returned:
 
 ```json
 {
@@ -203,3 +205,68 @@ https://itchy-apples-say.loca.lt/api/games
 
 -   The request must be send to the included address, for the above example the following:  
     https://itchy-apples-say.loca.lt/api/games/3613614387/move
+-   By sending the above request, the following should be returned for this example to player 1:
+
+```json
+{
+    "message": [
+        "Player: 'Millennium Falcon' have successfully registered the move: 'Rock'!",
+        "Check the state of the game",
+        "by making a GET request",
+        "to the following address, if the opponent isn't finished",
+        "you can make the request several times:",
+        "https://itchy-apples-say.loca.lt/api/games/3613614387"
+    ]
+}
+```
+
+-   Now when either player 1 or player 2 have made a move,  
+    the player needs to set the request to:  
+    **GET**
+-   The request address must be as included in the above message:  
+    https://itchy-apples-say.loca.lt/api/games/3613614387
+
+-   Now for the following example, player 1 may need to make several requests if the opponent (player 2) isn't finished:
+
+```json
+{
+    "message": [
+        "---STATE OF GAME---",
+        "Game-ID: 3613614387",
+        "---",
+        "Player 1 name: Millennium Falcon",
+        "Player 1 move: Registered",
+        "---",
+        "Player 2 name: X-wing Starfighter",
+        "Player 2 move: Not registered",
+        "---",
+        "Game result will be here"
+    ]
+}
+```
+
+-   When player two also have made a successful move request, the following message may look like this:
+
+```json
+{
+    "message": [
+        "---STATE OF GAME---",
+        "Game-ID: 3613614387",
+        "---",
+        "Player 1 name: Millennium Falcon",
+        "Player 1 move: Rock",
+        "---",
+        "Player 2 name: X-wing Starfighter",
+        "Player 2 move: Scissors",
+        "---",
+        "The winner is player: Millennium Falcon"
+    ]
+}
+```
+
+The game is finished!
+
+The same game process is for running the command: "npm run local"  
+But the server address will then be: "http://localhost:3000"
+
+## Hello world
