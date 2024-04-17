@@ -96,7 +96,8 @@ Below command runs the application locally, without **[Localtunnel](https://theb
 npm run local
 ```
 
-Below command runs the application publicly, with the use of **[Localtunnel](https://theboroer.github.io/localtunnel-www/)**. **(In some isolated cases when the application has been running for a while, the application has crashed due to firewall restrictions. But usually the application works just fine when using [Localtunnel](https://theboroer.github.io/localtunnel-www/))**
+Below command runs the application publicly, with the use of **[Localtunnel](https://theboroer.github.io/localtunnel-www/)**. **(In some isolated cases when the application has been running for a while, the application has crashed due to firewall restrictions with **[Localtunnel](https://theboroer.github.io/localtunnel-www/). But usually the application works just fine when using [Localtunnel](https://theboroer.github.io/localtunnel-www/))\*\*  
+If the application crashes, a restart of the server can be made by pressing "CTRL + C" then press the character: "y" then run the command: "npm run public" again.
 
 ```cmd
 npm run public
@@ -153,7 +154,7 @@ https://itchy-apples-say.loca.lt/api/games
 -   Now tell player 2 to choose a prefered API testing software.
 -   Player 2 needs to set the request to:  
     **POST**
--   The format must be in in:  
+-   The format must be in:  
     **JSON**
 -   The body should contain a key-value pair like the following example for player 2 name:
 
@@ -163,7 +164,7 @@ https://itchy-apples-say.loca.lt/api/games
 }
 ```
 
--   And Send the included address that ends with: "/join" for this example the following address, to player 2:  
+-   And send the included address that ends with: "/join" for the above example the following address, to player 2:  
     https://itchy-apples-say.loca.lt/api/games/3613614387/join
 
 -   By sending the above request, the following should be returned to player 2:
@@ -186,4 +187,19 @@ https://itchy-apples-say.loca.lt/api/games
 }
 ```
 
--   Now both players must choose a move to make
+-   Now both players must choose a move to make.  
+    Player 1 and player 2 needs to set the request to:  
+    **PUT**
+-   The format must be in:  
+    **JSON**
+-   The body must contain two key-value pairs like the following example for player 1 name and move:
+
+```json
+{
+    "name": "Millennium Falcon",
+    "move": "rock"
+}
+```
+
+-   The request must be send to the included address, for the above example the following:  
+    https://itchy-apples-say.loca.lt/api/games/3613614387/move
